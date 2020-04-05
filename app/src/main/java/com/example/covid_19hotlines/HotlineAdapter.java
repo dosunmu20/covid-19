@@ -1,23 +1,23 @@
 package com.example.covid_19hotlines;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class HotlineAdapter extends RecyclerView.Adapter<HotlineAdapter.HotlineViewHolder> {
+public class HotlineAdapter extends RecyclerView.Adapter<HotlineAdapter.HotlineViewHolder>  {
 
     String[] hotlines;
-    Context context;
+    Context context ;
+    HotlineListener hotlineListener;
+
+    public HotlineAdapter (HotlineListener hotlineListener) {
+        this.hotlineListener = hotlineListener;
+    }
 
     @NonNull
     @Override
@@ -32,19 +32,20 @@ public class HotlineAdapter extends RecyclerView.Adapter<HotlineAdapter.HotlineV
     public void onBindViewHolder(@NonNull HotlineAdapter.HotlineViewHolder holder, final int position) {
         holder.textViewHotlines.setText(hotlines[position]);
 
-      holder.itemView.setOnClickListener(new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-              Intent callIntent = new Intent(Intent.ACTION_CALL);
-              callIntent.setData(Uri.parse("tel:" + hotlines[position]));
-
-              if (ActivityCompat.checkSelfPermission(context,
-                      Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                  return;
-              }
-              context.startActivity(callIntent);
-          }
-      });
+//
+//      holder.itemView.setOnClickListener(new View.OnClickListener() {
+//          @Override
+//          public void onClick(View v) {
+//              Intent callIntent = new Intent(Intent.ACTION_CALL);
+//              callIntent.setData(Uri.parse("tel:" + hotlines[position]));
+//
+//              if (ActivityCompat.checkSelfPermission(context,
+//                      Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+//                  return;
+//              }
+//              context.startActivity(callIntent);
+//          }
+//      });
     }
 
     @Override
@@ -59,13 +60,25 @@ public class HotlineAdapter extends RecyclerView.Adapter<HotlineAdapter.HotlineV
         notifyDataSetChanged();
     }
 
-    public class HotlineViewHolder extends RecyclerView.ViewHolder {
+    public class HotlineViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView textViewHotlines;
 
         public HotlineViewHolder(@NonNull View itemView) {
             super(itemView);
-
             textViewHotlines = itemView.findViewById(R.id.hotlines);
+
+            textViewHotlines.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            if(hotlineListener != null){
+                hotlineListener.onClickHotlineItem(getAdapterPosition());
+            }
+        }
+
+    }
+    public interface HotlineListener {
+        void onClickHotlineItem(int positon);
     }
 }

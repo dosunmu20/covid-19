@@ -17,6 +17,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>  {
     private List<String> states;
     private Context context;
     OnStateClickListener listener;
+
+    public MyAdapter (OnStateClickListener listener){
+        this.listener = listener;
+    }
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -24,6 +28,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>  {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.states,parent,false);
         return new MyViewHolder(view);
     }
+
+
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {

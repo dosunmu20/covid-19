@@ -1,5 +1,6 @@
 package com.example.covid_19hotlines;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.OnState
         recyclerView = findViewById(R.id.rview);
         recyclerView.setHasFixedSize(true);
 
-        adapter = new MyAdapter();
+        adapter = new MyAdapter(this);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,
                 false);
@@ -52,10 +53,11 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.OnState
 
     @Override
     public void onStateClick(int position) {
-        Toast.makeText(getApplicationContext(), "Item Clicked", Toast.LENGTH_SHORT).show();
-//        final String state = listofStates.get(position);
-//        Intent intent = new Intent(this, Hotlines.class);
-//        intent.putExtra("state", state);
-//        startActivity(intent);
+
+        final String state = listofStates.get(position).trim();
+        Intent intent = new Intent(this, Hotlines.class);
+        intent.putExtra("state", state);
+        Toast.makeText(getApplicationContext(), state, Toast.LENGTH_SHORT).show();
+        startActivity(intent);
     }
 }
